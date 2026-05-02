@@ -25,7 +25,7 @@ public class MQL4TokenSets implements MQL4Elements {
     );
 
     public static final TokenSet LITERALS = TokenSet.create(STRING_LITERAL, CHAR_LITERAL, INTEGER_LITERAL, DOUBLE_LITERAL,
-            FALSE_KEYWORD, TRUE_KEYWORD, COLOR_CONSTANT_LITERAL, COLOR_STRING_LITERAL);
+            FALSE_KEYWORD, TRUE_KEYWORD, COLOR_CONSTANT_LITERAL, COLOR_STRING_LITERAL, NULLPTR_KEYWORD);
 
     public static final TokenSet STRINGS_AND_CHARS = TokenSet.create(STRING_LITERAL, CHAR_LITERAL, INCLUDE_STRING_LITERAL);
 
@@ -80,6 +80,9 @@ public class MQL4TokenSets implements MQL4Elements {
     );
 
     public static final TokenSet CLASS_STRUCT_INTERFACE = TokenSet.create(CLASS_KEYWORD, STRUCT_KEYWORD, INTERFACE_KEYWORD);
+
+    public static final TokenSet METHOD_MODIFIERS = TokenSet.create(
+            VIRTUAL_KEYWORD, OVERRIDE_KEYWORD, FINAL_KEYWORD, CONST_KEYWORD, STATIC_KEYWORD);
 
     @NotNull
     public static IElementType getLeftBracketFor(@NotNull IElementType rightBracket) {

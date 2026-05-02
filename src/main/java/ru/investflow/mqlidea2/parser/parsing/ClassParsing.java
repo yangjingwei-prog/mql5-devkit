@@ -24,15 +24,28 @@ public class ClassParsing implements MQL4Elements {
     public static final TokenSet ON_ERROR_CLASS_DO_NOT_ADVANCE_TOKENS = TokenSet.create(SEMICOLON);
 
     /**
-     * Form: (class|struct) name { }
+     * Form: [final] (class|struct) name { }
      */
     public static boolean parseClassOrStruct(PsiBuilder b, int l) {
         IElementType t1 = b.getTokenType();
+        boolean hasFinal = false;
+        if (t1 == FINAL_KEYWORD) {
+            IElementType t2 = b.lookAhead(1);
+            if (CLASS_STRUCT_INTERFACE.contains(t2)) {
+                hasFinal = true;
+                t1 = t2;
+            } else {
+                return false;
+            }
+        }
         if (!CLASS_STRUCT_INTERFACE.contains(t1)) {
             return false;
         }
         Marker m = b.mark();
         try {
+            if (hasFinal) {
+                b.advanceLexer(); // 'final'
+            }
             b.advanceLexer(); // 'class|struct'
             IElementType t2 = b.getTokenType();
             if (t2 != IDENTIFIER) {

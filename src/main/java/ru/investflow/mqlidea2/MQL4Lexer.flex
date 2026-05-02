@@ -120,7 +120,13 @@ color_string_literal = C \' ({decimal_integer} | {hexadecimal_integer} | , )* \'
 // Memory classes
 "extern"    { return MQL4Elements.EXTERN_KEYWORD; }
 "input"     { return MQL4Elements.INPUT_KEYWORD; }
+"sinput"    { return MQL4Elements.SINPUT_KEYWORD; }
 "static"    { return MQL4Elements.STATIC_KEYWORD; }
+
+// MQL5-specific modifiers and literals
+"override"  { return MQL4Elements.OVERRIDE_KEYWORD; }
+"final"     { return MQL4Elements.FINAL_KEYWORD; }
+"nullptr"   { return MQL4Elements.NULLPTR_KEYWORD; }
 
 // Operators
 "break"     { return MQL4Elements.BREAK_KEYWORD; }

@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-import org.apache.commons.lang.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.investflow.mqlidea2.psi.MQL4Elements;
@@ -79,11 +78,18 @@ public class PreprocessorPropertyInspection extends LocalInspectionTool implemen
             return name;
         }
         for (String cn : COUNTING_NAMES) {
-            if (name.startsWith(cn) && NumberUtils.isDigits(name.substring(cn.length()))) {
+            if (name.startsWith(cn) && isDigits(name.substring(cn.length()))) {
                 return cn + "N";
             }
         }
         return name;
+    }
+
+    private static boolean isDigits(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i))) return false;
+        }
+        return str.length() > 0;
     }
 
     @Nullable

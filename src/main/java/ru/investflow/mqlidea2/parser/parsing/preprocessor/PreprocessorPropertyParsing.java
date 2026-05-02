@@ -43,7 +43,17 @@ public class PreprocessorPropertyParsing implements MQL4Elements {
                 completePPLineStatement(b, offset, "Illegal #property value");
                 return true;
             }
-            b.advanceLexer(); // name -> next token
+            b.advanceLexer(); // value -> next token (comma or eol)
+            // support comma-separated value lists, e.g.: #property indicator_color1 clrRed,clrLime,clrBlue
+            while (b.getTokenType() == COMMA) {
+                b.advanceLexer(); // comma -> next value
+                IElementType nextType = b.getTokenType();
+                if (nextType != IDENTIFIER && !MQL4TokenSets.LITERALS.contains(nextType)) {
+                    error(b, "Value expected after comma");
+                    break;
+                }
+                b.advanceLexer(); // value -> next token
+            }
             completePPLineStatement(b, offset);
             return true;
         } finally {

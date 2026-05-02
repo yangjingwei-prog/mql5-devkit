@@ -16,7 +16,7 @@ import static ru.investflow.mqlidea2.parser.parsing.util.ParsingUtils.advanceLex
 public class ExpressionParsing implements MQL4Elements {
 
     public static final TokenSet COMPILE_TIME_NUMBER = TokenSet.create(IDENTIFIER, INTEGER_LITERAL, CHAR_LITERAL, COLOR_CONSTANT_LITERAL, COLOR_STRING_LITERAL, DOUBLE_LITERAL);
-    public static final TokenSet COMPILE_TIME_VALUE = TokenSet.orSet(COMPILE_TIME_NUMBER, TokenSet.create(STRING_LITERAL, TRUE_KEYWORD, FALSE_KEYWORD));
+    public static final TokenSet COMPILE_TIME_VALUE = TokenSet.orSet(COMPILE_TIME_NUMBER, TokenSet.create(STRING_LITERAL, TRUE_KEYWORD, FALSE_KEYWORD, NULLPTR_KEYWORD));
 
     public static final TokenSet SIZEOF_TYPES = TokenSet.create(
             BOOL_KEYWORD,

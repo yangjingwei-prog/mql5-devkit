@@ -1692,6 +1692,28 @@ public class MQL4Lexer implements FlexLexer {
     return zzBuffer.subSequence(zzStartRead, zzMarkedPos);
   }
 
+  /**
+   * Checks if the matched IDENTIFIER token is actually an MQL5-specific keyword
+   * that was not in the original MQL4 DFA table.
+   */
+  private IElementType checkMQL5Keyword() {
+    CharSequence text = yytext();
+    int len = zzMarkedPos - zzStartRead;
+    if (len == 6 && text.charAt(0) == 's' && "sinput".contentEquals(text)) {
+      return MQL4Elements.SINPUT_KEYWORD;
+    }
+    if (len == 8 && text.charAt(0) == 'o' && "override".contentEquals(text)) {
+      return MQL4Elements.OVERRIDE_KEYWORD;
+    }
+    if (len == 5 && text.charAt(0) == 'f' && "final".contentEquals(text)) {
+      return MQL4Elements.FINAL_KEYWORD;
+    }
+    if (len == 7 && text.charAt(0) == 'n' && "nullptr".contentEquals(text)) {
+      return MQL4Elements.NULLPTR_KEYWORD;
+    }
+    return MQL4Elements.IDENTIFIER;
+  }
+
 
   /**
    * Returns the character at position {@code pos} from the
@@ -1878,8 +1900,8 @@ public class MQL4Lexer implements FlexLexer {
             } 
             // fall through
           case 119: break;
-          case 4: 
-            { return MQL4Elements.IDENTIFIER;
+          case 4:
+            { return checkMQL5Keyword();
             } 
             // fall through
           case 120: break;

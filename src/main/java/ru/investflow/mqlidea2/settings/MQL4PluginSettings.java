@@ -13,6 +13,6 @@ public interface MQL4PluginSettings {
     void setPerformErrorAnalysis(boolean v);
 
     static MQL4PluginSettings getInstance() {
-        return ApplicationManager.getApplication().getComponent(MQL4PluginSettings.class);
+        return ApplicationManager.getApplication().getService(MQL4PluginSettingsImpl.class);
     }
 }

@@ -15,6 +15,8 @@ import static ru.investflow.mqlidea2.parser.parsing.CommentParsing.parseComment;
 import static ru.investflow.mqlidea2.parser.parsing.preprocessor.PreprocessorIfDefParsing.parseDefine;
 import static ru.investflow.mqlidea2.parser.parsing.preprocessor.PreprocessorIfDefParsing.parseUndef;
 import static ru.investflow.mqlidea2.parser.parsing.statement.EnumParsing.parseEnum;
+import static ru.investflow.mqlidea2.parser.parsing.statement.StatementParsing.parseReturnStatement;
+import static ru.investflow.mqlidea2.parser.parsing.statement.StatementParsing.parseSingleWordStatement;
 import static ru.investflow.mqlidea2.parser.parsing.statement.StatementParsing.parseEmptyStatement;
 import static ru.investflow.mqlidea2.parser.parsing.util.ParsingErrors.NO_MATCHING_CLOSING_BRACKET;
 import static ru.investflow.mqlidea2.parser.parsing.util.ParsingErrors.advanceWithError;
@@ -73,6 +75,8 @@ public class BracketBlockParsing implements MQL4Elements {
                             || parseDefine(b)
                             || parseUndef(b)
                             || parseBracketsBlock(b, l + 1, false)
+                            || parseReturnStatement(b)
+                            || parseSingleWordStatement(b)
                             || parseEmptyStatement(b)
                             || parseComment(b);
                 }
