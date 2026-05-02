@@ -1,1 +1,1 @@
-rootProject.name = "mqlidea2"
+rootProject.name = "mql5-devkit"

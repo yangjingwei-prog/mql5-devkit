@@ -26,10 +26,11 @@ public class StatementParsing implements MQL4Elements {
 
         return parseEmptyStatement(b)
                 || parseVarDeclaration(b, l)
+                || parseReturnStatement(b)
                 || parseSingleWordStatement(b);
     }
 
-    private static boolean parseSingleWordStatement(PsiBuilder b) {
+    public static boolean parseSingleWordStatement(PsiBuilder b) {
         IElementType t = b.getTokenType();
         if (!SINGLE_WORD_STATEMENTS.contains(t)) {
             return false;
@@ -38,6 +39,24 @@ public class StatementParsing implements MQL4Elements {
         b.advanceLexer();
         if (!parseTokenOrFail(b, SEMICOLON)) {
             ParsingUtils.advanceLexerUntil(b, SEMICOLON, TokenAdvanceMode.ADVANCE);
+        }
+        m.done(SINGLE_WORD_STATEMENT);
+        return true;
+    }
+
+    public static boolean parseReturnStatement(PsiBuilder b) {
+        if (b.getTokenType() != RETURN_KEYWORD) {
+            return false;
+        }
+        PsiBuilder.Marker m = b.mark();
+        b.advanceLexer(); // 'return'
+        // consume everything until semicolon
+        while (!b.eof() && b.getTokenType() != SEMICOLON
+                && b.getTokenType() != R_CURLY_BRACKET) {
+            b.advanceLexer();
+        }
+        if (b.getTokenType() == SEMICOLON) {
+            b.advanceLexer();
         }
         m.done(SINGLE_WORD_STATEMENT);
         return true;

@@ -37,7 +37,7 @@ public class FunctionsParsing implements MQL4Elements {
         Definition
     }
 
-    private static final TokenSet FUNCTION_DESCRIPTION_TOKENS = TokenSet.create(MQL4Elements.VIRTUAL_KEYWORD, MQL4Elements.CONST_KEYWORD);
+    private static final TokenSet FUNCTION_DESCRIPTION_TOKENS = TokenSet.create(MQL4Elements.VIRTUAL_KEYWORD, MQL4Elements.CONST_KEYWORD, MQL4Elements.OVERRIDE_KEYWORD, MQL4Elements.FINAL_KEYWORD);
 
     private static final List<PatternMatcher> FUNCTION_MATCHER = Arrays.asList(
             (b, ahead) -> { // return type: custom type or data type
@@ -138,6 +138,9 @@ public class FunctionsParsing implements MQL4Elements {
             if (b.getTokenType() == CONST_KEYWORD) {
                 b.advanceLexer(); // 'const'
             }
+            while (b.getTokenType() == OVERRIDE_KEYWORD || b.getTokenType() == FINAL_KEYWORD) {
+                b.advanceLexer(); // 'override' or 'final'
+            }
 
             boolean hasFieldsInitBlock = false;
             if (b.getTokenType() == COLON && canBeConstructorDefinition) { // constructor in-place init
@@ -150,7 +153,7 @@ public class FunctionsParsing implements MQL4Elements {
             } else if (b.getTokenType() == EQ) { // pure virtual function
                 b.advanceLexer(); // '='
                 String tt = b.getTokenText();
-                if ("0".equals(tt) || "NULL".equals(tt)) {
+                if ("0".equals(tt) || "NULL".equals(tt) || b.getTokenType() == NULLPTR_KEYWORD) {
                     b.advanceLexer(); // '=0'
                 } else {
                     String err = "0 or NULL is expected";

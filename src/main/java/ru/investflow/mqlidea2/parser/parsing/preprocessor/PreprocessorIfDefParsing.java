@@ -56,6 +56,25 @@ public class PreprocessorIfDefParsing implements MQL4Elements {
             } else {
                 b.advanceLexer(); // identifier
             }
+            // Check for parameterized macro: #define MACRO(params) body
+            if (b.getTokenType() == L_ROUND_BRACKET) {
+                PsiBuilder.Marker paramsMarker = b.mark();
+                b.advanceLexer(); // '('
+                while (b.getTokenType() != R_ROUND_BRACKET && !b.eof()) {
+                    if (b.getTokenType() == IDENTIFIER) {
+                        b.advanceLexer(); // parameter name
+                    }
+                    if (b.getTokenType() == COMMA) {
+                        b.advanceLexer(); // ','
+                    } else if (b.getTokenType() != R_ROUND_BRACKET) {
+                        break;
+                    }
+                }
+                if (b.getTokenType() == R_ROUND_BRACKET) {
+                    b.advanceLexer(); // ')'
+                }
+                paramsMarker.done(PREPROCESSOR_DEFINE_PARAMS);
+            }
             // skip until end of line and all escaped lines
             PreprocessorParsing.completePPMultiLineStatement(b, identifierOffset);
         } finally {

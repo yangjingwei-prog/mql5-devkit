@@ -35,6 +35,10 @@ public interface MQL4Elements extends MQL4StubElements, MQL4LexerElements {
     IElementType VAR_DEFINITION_LIST = new MQL4ElementType("VAR_DEFINITION_LIST");
     IElementType VAR_DEFINITION = new MQL4ElementType("VAR_DEFINITION");
 
+    IElementType GLOBAL_VAR_DECLARATION = new MQL4ElementType("GLOBAL_VAR_DECLARATION");
+    IElementType INPUT_GROUP_BLOCK = new MQL4ElementType("INPUT_GROUP_BLOCK");
+    IElementType PREPROCESSOR_DEFINE_PARAMS = new MQL4ElementType("PREPROCESSOR_DEFINE_PARAMS");
+
     // Special element types for syntax highlighter only
     IElementType SYNTAX_BUILT_IN_CONSTANT = new MQL4ElementType("SYNTAX_BUILT_IN_CONSTANT");
     IElementType SYNTAX_BUILT_IN_FUNCTION = new MQL4ElementType("SYNTAX_BUILT_IN_FUNCTION");

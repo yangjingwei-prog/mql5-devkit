@@ -1,37 +1,40 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>ru.investflow.mqlidea2</id>
-    <version>1.0.0</version>
-    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="mike.fursov@gmail.com" url="https://investflow.ru/mqlidea">Investflow.Ru</vendor>
+    <id>com.mql5.devkit</id>
+    <version>0.1.0</version>
+    <vendor email="" url="https://github.com/yourname/mql5-devkit">MQL5 DevKit</vendor>
 
-    <!-- Public plugin name should be written in Title Case.
-         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>MQL Idea 2</name>
+    <name>MQL5 DevKit</name>
 
-    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
-         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
-         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    MQL4/MQL5 language support for Intellij IDEA.<br>
-    <em>most MQL commands may be used</em>
+    Complete MQL5 development environment for IntelliJ IDEA.<br>
+    <ul>
+      <li>Syntax highlighting for MQL4/MQL5</li>
+      <li>Code completion &amp; documentation</li>
+      <li>One-click compilation via MetaEditor</li>
+      <li>Inline error annotations</li>
+      <li>Project templates &amp; file wizards</li>
+      <li>clangd integration for advanced IntelliSense</li>
+    </ul>
+    <em>Based on MQL Idea 2 by Investflow and Lime MQL Editing</em>
   ]]></description>
 
-    <!-- Product and plugin compatibility requirements.
-         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
-    <actions>
-        <action id="NewMQL4File" class="ru.investflow.mqlidea2.action.CreateMQL4FileAction">
-            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
-        </action>
-    </actions>
-
-    <!-- Extension points defined by the plugin.
-         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
 
+        <!-- Application-level services -->
+        <applicationService serviceImplementation="ru.investflow.mqlidea2.settings.Mql5Settings"/>
+        <applicationService serviceImplementation="ru.investflow.mqlidea2.settings.MQL4PluginSettingsImpl"/>
+
+        <!-- Project-level services -->
+        <projectService serviceImplementation="ru.investflow.mqlidea2.ui.Mql5BuildLogService"/>
+        <projectService serviceImplementation="ru.investflow.mqlidea2.compiler.Mql5CompilationResultCache"/>
+
+        <!-- Notification groups -->
+        <notificationGroup id="MQL5DevKit" displayType="BALLOON"/>
+
+        <!-- Language & File Type -->
         <fileType name="MQL4 File"
                   implementationClass="ru.investflow.mqlidea2.MQL4FileType"
                   fieldName="INSTANCE"
@@ -39,7 +42,10 @@
                   extensions="mq4;mqh;mql4;mq5;mql5"
         />
 
+        <!-- Parser -->
         <lang.parserDefinition language="MQL4" implementationClass="ru.investflow.mqlidea2.parser.MQL4ParserDefinition"/>
+
+        <!-- Editor Features -->
         <lang.syntaxHighlighterFactory language="MQL4"
                                        implementationClass="ru.investflow.mqlidea2.editor.MQL4SyntaxHighlighter$MQL4SyntaxHighlighterFactory"/>
         <lang.commenter language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4Commenter"/>
@@ -47,36 +53,41 @@
                                     implementationClass="ru.investflow.mqlidea2.doc.MQL4DocumentationProvider"/>
         <lang.braceMatcher language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4BraceMatcher"/>
         <lang.foldingBuilder language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4FoldingBuilder"/>
+
+        <!-- Code Completion -->
         <completion.contributor language="MQL4"
                                 implementationClass="ru.investflow.mqlidea2.editor.codecompletion.MQL4CompletionContributor"/>
 
-        <!-- sdk -->
+        <!-- Error Annotations from MetaEditor -->
+        <externalAnnotator language="MQL4"
+                           implementationClass="ru.investflow.mqlidea2.compiler.Mql5ExternalAnnotator"/>
+
+        <!-- SDK -->
         <sdkType implementation="ru.investflow.mqlidea2.sdk.MQL4SdkType"/>
 
-        <!--build runner-->
+        <!-- Module Type for new MQL5 projects -->
+        <moduleType id="MQL5_MODULE" implementationClass="ru.investflow.mqlidea2.action.Mql5ModuleBuilder$Mql5ModuleType"/>
+
+        <!-- Build Runner (existing) -->
         <programRunner implementation="ru.investflow.mqlidea2.runconfig.MQL4CompilerRunner"/>
         <runConfigurationProducer implementation="ru.investflow.mqlidea2.runconfig.MQL4RunCompilerConfigurationProducer"/>
         <configurationType implementation="ru.investflow.mqlidea2.runconfig.MQL4RunCompilerConfigurationType"/>
 
-        <!--
-        https://plugins.jetbrains.com/docs/intellij/settings-guide.html#declaring-application-settings
-        https://confluence.jetbrains.com/display/IDEADEV/Customizing+the+IDEA+Settings+Dialog
-        https://sites.google.com/site/malenkov/java/150403
-        -->
-        <projectConfigurable id="settings.mql4" groupId="language"
-                             instance="ru.investflow.mqlidea2.settings.MQL4PluginSettingsPanel"
-                             displayName="MQL4"/>
+        <!-- Settings -->
+        <projectConfigurable id="settings.mql5" parentId="tools"
+                             instance="ru.investflow.mqlidea2.settings.Mql5SettingsConfigurable"
+                             displayName="MQL5 DevKit"/>
 
-        <!--Inspections-->
-        <localInspection language="MQL4" groupName="MQL4 inspections" enabledByDefault="true" level="WARNING"
+        <!-- Inspections -->
+        <localInspection language="MQL4" groupName="MQL5 inspections" enabledByDefault="true" level="WARNING"
                          displayName="Preprocessor #property element"
                          implementationClass="ru.investflow.mqlidea2.inspection.PreprocessorPropertyInspection"/>
 
-        <!--Structure view-->
+        <!-- Structure View -->
         <lang.psiStructureViewFactory language="MQL4"
                                       implementationClass="ru.investflow.mqlidea2.structure.MQL4StructureViewBuilderFactory"/>
 
-        <!--Indexing -->
+        <!-- Indexing -->
         <stubElementTypeHolder class="ru.investflow.mqlidea2.psi.stub.MQL4StubElements"/>
         <stubIndex implementation="ru.investflow.mqlidea2.index.MQL4ClassNameIndex"/>
         <stubIndex implementation="ru.investflow.mqlidea2.index.MQL4FunctionNameIndex"/>
@@ -85,5 +96,51 @@
         <gotoSymbolContributor implementation="ru.investflow.mqlidea2.index.MQL4GotoSymbolContributor"/>
         <gotoDeclarationHandler implementation="ru.investflow.mqlidea2.index.MQL4GotoDeclarationHandler"/>
 
+        <!-- Tool Window -->
+        <toolWindow id="MQL5 Build" anchor="bottom"
+                    factoryClass="ru.investflow.mqlidea2.ui.Mql5ToolWindowFactory"
+                    icon="AllIcons.Actions.Compile"/>
+
     </extensions>
+
+    <applicationListeners>
+        <listener class="ru.investflow.mqlidea2.compiler.Mql5CompileOnSaveHandler"
+                  topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>
+    </applicationListeners>
+
+    <actions>
+        <group id="MQL5.NewGroup" text="MQL5" popup="true">
+            <action id="MQL5.NewEA" class="ru.investflow.mqlidea2.action.CreateMQL5FileAction$Ea"/>
+            <action id="MQL5.NewIndicator" class="ru.investflow.mqlidea2.action.CreateMQL5FileAction$Indicator"/>
+            <action id="MQL5.NewScript" class="ru.investflow.mqlidea2.action.CreateMQL5FileAction$Script"/>
+            <action id="MQL5.NewService" class="ru.investflow.mqlidea2.action.CreateMQL5FileAction$Service"/>
+            <action id="MQL5.NewInclude" class="ru.investflow.mqlidea2.action.CreateMQL5FileAction$Include"/>
+            <separator/>
+            <action id="MQL5.NewMQ4" class="ru.investflow.mqlidea2.action.CreateMQL5FileAction$Mq4"/>
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
+        </group>
+
+        <!-- Compile Actions -->
+        <action id="MQL5.CompileCurrent"
+                class="ru.investflow.mqlidea2.compiler.Mql5BuildAction"
+                text="Compile MQL5" description="Compile current MQL5 file with MetaEditor">
+            <add-to-group group-id="BuildMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift F9"/>
+        </action>
+
+        <!-- Run on Chart -->
+        <action id="MQL5.RunOnChart"
+                class="ru.investflow.mqlidea2.compiler.Mql5RunOnChartAction"
+                text="Run on Chart" description="Compile and run in MetaTrader 5 terminal">
+            <add-to-group group-id="BuildMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift F10"/>
+        </action>
+
+        <!-- clangd Setup -->
+        <action id="MQL5.SetupClangd"
+                class="ru.investflow.mqlidea2.clangd.ClangdSetupAction"
+                text="Setup clangd for MQL5" description="Generate .clangd configuration for MQL5 IntelliSense">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>

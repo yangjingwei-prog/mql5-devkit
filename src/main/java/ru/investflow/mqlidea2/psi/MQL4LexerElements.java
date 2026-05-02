@@ -91,7 +91,13 @@ public interface MQL4LexerElements {
     // Memory classes
     IElementType EXTERN_KEYWORD = new MQL4ElementType("EXTERN_KEYWORD");
     IElementType INPUT_KEYWORD = new MQL4ElementType("INPUT_KEYWORD");
+    IElementType SINPUT_KEYWORD = new MQL4ElementType("SINPUT_KEYWORD");
     IElementType STATIC_KEYWORD = new MQL4ElementType("STATIC_KEYWORD");
+
+    // MQL5-specific modifiers and literals
+    IElementType OVERRIDE_KEYWORD = new MQL4ElementType("OVERRIDE_KEYWORD");
+    IElementType FINAL_KEYWORD = new MQL4ElementType("FINAL_KEYWORD");
+    IElementType NULLPTR_KEYWORD = new MQL4ElementType("NULLPTR_KEYWORD");
 
     // Access specifiers
     IElementType CONST_KEYWORD = new MQL4ElementType("CONST_KEYWORD");
