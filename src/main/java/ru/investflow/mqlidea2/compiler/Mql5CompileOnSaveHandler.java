@@ -46,8 +46,15 @@ public class Mql5CompileOnSaveHandler implements FileDocumentManagerListener {
         Project project = findProjectForFile(file);
         if (project == null) return;
 
-        // Skip .mqh files (smart target not implemented yet)
-        if ("mqh".equalsIgnoreCase(file.getExtension())) return;
+        // For .mqh files, find the compile target
+        if ("mqh".equalsIgnoreCase(file.getExtension())) {
+            VirtualFile target = Mql5SmartCompileTarget.findCompileTarget(file, project);
+            if (target != null && target.getCanonicalPath() != null) {
+                compileFile(project, metaEditorPath, target.getCanonicalPath(),
+                        target.getName() + " (via " + file.getName() + ")", target);
+            }
+            return;
+        }
 
         compileFile(project, metaEditorPath, filePath, file.getName(), file);
     }

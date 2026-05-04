@@ -12,7 +12,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import java.io.File;
 
 /**
  * MQL5 DevKit 设置界面
@@ -79,9 +81,40 @@ public class Mql5SettingsConfigurable implements Configurable {
 
         enDocsCheckBox = new JBCheckBox("Use English documentation");
 
+        JButton testBtn = new JButton("Test");
+        testBtn.addActionListener(e -> {
+            String path = metaEditorPathField.getText().trim();
+            if (path.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "MetaEditor path is empty.", "Test Failed", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            File exe = new File(path);
+            if (!exe.exists()) {
+                JOptionPane.showMessageDialog(null, "File not found:\n" + path, "Test Failed", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!exe.getName().toLowerCase().startsWith("metaeditor")) {
+                JOptionPane.showMessageDialog(null, "File does not appear to be MetaEditor:\n" + exe.getName(), "Test Failed", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            try {
+                ProcessBuilder pb = new ProcessBuilder(path, "/?");
+                pb.redirectErrorStream(true);
+                Process proc = pb.start();
+                proc.waitFor();
+                // metaeditor64.exe exits even with /? — just verify it launched
+                JOptionPane.showMessageDialog(null, "MetaEditor found and executable.\n" + path, "Test OK", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Failed to launch MetaEditor:\n" + ex.getMessage(), "Test Failed", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         JPanel metaEditorPanel = new JPanel(new java.awt.BorderLayout(5, 0));
         metaEditorPanel.add(metaEditorPathField, java.awt.BorderLayout.CENTER);
-        metaEditorPanel.add(autoDetectBtn, java.awt.BorderLayout.EAST);
+        JPanel btnPanel = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+        btnPanel.add(autoDetectBtn);
+        btnPanel.add(testBtn);
+        metaEditorPanel.add(btnPanel, java.awt.BorderLayout.EAST);
 
         return FormBuilder.createFormBuilder()
             .addSeparator()

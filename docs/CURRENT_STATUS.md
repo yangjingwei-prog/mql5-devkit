@@ -1,8 +1,8 @@
 # 当前实现状态
 
-**更新时间：** 2026-05-02
+**更新时间：** 2026-05-04
 **版本：** v0.1.0
-**状态：** P0 功能已全部实现，P1 部分完成
+**状态：** P0-P1 全部完成，Phase 6 编辑器增强全部完成
 
 ## 已完成功能
 
@@ -11,17 +11,33 @@
 - [x] `Mql5ErrorParser.java` — 编译日志解析，正则匹配 error/warning
 - [x] `Mql5ExternalAnnotator.java` — 编译错误/警告标注到编辑器对应位置（红/黄下划线）
 - [x] `Mql5CompilationResultCache.java` — 项目级错误缓存，供 ExternalAnnotator 读取
-- [x] `Mql5CompileOnSaveHandler.java` — 保存 .mq5/.mq4 时自动编译
+- [x] `Mql5CompileOnSaveHandler.java` — 保存 .mq5/.mq4 时自动编译（含 .mqh 智能编译目标）
 - [x] `Mql5RunOnChartAction.java` — 编译 + 部署 .ex5 + 启动终端（Ctrl+Shift+F10）
+- [x] `Mql5SmartCompileTarget.java` — 编辑 .mqh 时自动找到关联 .mq5/.mq4 并编译
 
 ### 配置管理（Phase 2）✅ 全部完成
 - [x] `Mql5Settings.java` — 10+ 字段持久化配置（PersistentStateComponent）
 - [x] `Mql5PathDetector.java` — 自动检测 MetaEditor/终端安装路径
 - [x] `Mql5SettingsConfigurable.java` — 设置 UI（Settings > Tools > MQL5 DevKit）
+- [x] Test 按钮 — 验证 MetaEditor 路径是否有效
 
 ### UI 与工具窗口 ✅ 全部完成
-- [x] `Mql5ToolWindowFactory.java` — Build Log 工具窗口（底部面板）
+- [x] `Mql5ToolWindowFactory.java` — Build Log 工具窗口（底部面板，含 Clear/Copy 工具栏）
 - [x] `Mql5BuildLogService.java` — 编译日志管理服务
+
+### 项目模板（Phase 4）✅ 全部完成
+- [x] `Mql5ModuleBuilder.java` — 新建项目向导（选择初始文件类型+名称）
+- [x] 文件模板：EA / Indicator / Script / Service / Include
+- [x] New → MQL5 右键菜单（EA、指标、脚本、服务、Include、MQL4 文件）
+- [x] `OpenInMetaEditorAction.java` — 右键/项目菜单打开 MetaEditor
+
+### 编辑器增强（Phase 6）✅ 全部完成
+- [x] `MQL4LiveTemplateContext.java` + `liveTemplates/MQL5.xml` — 18 个 Live Template
+- [x] `MQL4TypedHandler.java` — 自动配对引号（单/双引号）
+- [x] `MQL4ColorSettingsPage.java` — 颜色设置页（Settings > Editor > Color Scheme > MQL5）
+- [x] `MQL4ParameterInfoHandler.java` — 参数提示（Ctrl+P）
+- [x] `MQL4FindUsagesProvider.java` — 查找引用（Alt+F7）
+- [x] `MQL4RenameProcessor.java` — 重命名重构（Shift+F6）
 
 ### clangd 集成（Phase 5）✅ 基础完成
 - [x] `ClangdConfigGenerator.java` — .clangd YAML 配置生成
@@ -40,17 +56,20 @@
 | projectService | Mql5BuildLogService | 编译日志服务 |
 | projectService | Mql5CompilationResultCache | 错误缓存 |
 | externalAnnotator | Mql5ExternalAnnotator | 编辑器错误标注 |
-| toolWindow | MQL5 Build | 编译日志面板 |
+| toolWindow | MQL5 Build | 编译日志面板（含工具栏） |
 | projectConfigurable | Mql5SettingsConfigurable | Settings > Tools > MQL5 DevKit |
+| colorSettingsPage | MQL4ColorSettingsPage | Settings > Editor > Color Scheme > MQL5 |
+| codeInsight.parameterInfo | MQL4ParameterInfoHandler | Ctrl+P 参数提示 |
+| lang.findUsagesProvider | MQL4FindUsagesProvider | Alt+F7 查找引用 |
+| renameHandler | MQL4RenameProcessor | Shift+F6 重命名 |
+| defaultLiveTemplates | MQL5.xml | 18 个 Live Template |
+| typedHandler | MQL4TypedHandler | 自动配对引号 |
 | action | Compile MQL5 (Ctrl+Shift+F9) | 一键编译 |
 | action | Run on Chart (Ctrl+Shift+F10) | 编译+部署+运行 |
 | action | Setup clangd for MQL5 | 生成 .clangd |
+| action | Open in MetaEditor | 右键打开 MetaEditor |
 
 ## 待实现
-
-### P1（用户体验）
-- [ ] **智能编译目标** — 编辑 .mqh 时自动找到关联 .mq5 并编译（当前跳过 .mqh）
-- [ ] **项目模板向导** — New Project Wizard（EA/指标/脚本/服务）
 
 ### P2（高级功能）
 - [ ] **clangd LSP 集成** — 当前仅生成 .clangd 配置，未实现 LSP 客户端

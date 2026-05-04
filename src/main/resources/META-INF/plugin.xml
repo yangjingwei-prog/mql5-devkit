@@ -48,15 +48,60 @@
         <!-- Editor Features -->
         <lang.syntaxHighlighterFactory language="MQL4"
                                        implementationClass="ru.investflow.mqlidea2.editor.MQL4SyntaxHighlighter$MQL4SyntaxHighlighterFactory"/>
+        <colorSettingsPage implementationClass="ru.investflow.mqlidea2.editor.MQL4ColorSettingsPage"/>
         <lang.commenter language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4Commenter"/>
         <lang.documentationProvider language="MQL4"
                                     implementationClass="ru.investflow.mqlidea2.doc.MQL4DocumentationProvider"/>
         <lang.braceMatcher language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4BraceMatcher"/>
         <lang.foldingBuilder language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4FoldingBuilder"/>
+        <typedHandler language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4TypedHandler"/>
+
+        <!-- Quote Handler -->
+        <editorQuoteHandler language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4QuoteHandler"/>
+
+        <!-- Enter Handler -->
+        <enterHandlerDelegate implementation="ru.investflow.mqlidea2.editor.MQL4EnterHandlerDelegate"/>
+
+        <!-- Line Markers -->
+        <codeInsight.lineMarkerProvider language="MQL4"
+                                        implementationClass="ru.investflow.mqlidea2.editor.MQL4LineMarkerProvider"/>
+
+        <!-- Highlight Usages -->
+        <highlightUsagesHandlerFactory implementation="ru.investflow.mqlidea2.editor.MQL4HighlightUsagesHandlerFactory"/>
+
+        <!-- File Icon Provider -->
+        <fileIconProvider implementation="ru.investflow.mqlidea2.editor.MQL4FileIconProvider"/>
+
+        <!-- Code Formatter -->
+        <lang.formatter language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4CodeFormatter"/>
+
+        <!-- Import Optimizer -->
+        <lang.importOptimizer language="MQL4" implementationClass="ru.investflow.mqlidea2.editor.MQL4ImportOptimizer"/>
+
+        <!-- Spellchecker -->
+        <spellchecker.support language="MQL4"
+                              implementationClass="ru.investflow.mqlidea2.editor.MQL4SpellcheckingStrategy"/>
+
+        <!-- Surround With -->
+        <lang.surroundDescriptor language="MQL4"
+                                 implementationClass="ru.investflow.mqlidea2.editor.MQL4SurroundWithHandler"/>
+
+        <!-- Code Style Settings -->
+        <codeStyleSettingsProvider implementation="ru.investflow.mqlidea2.editor.MQL4CodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                implementationClass="ru.investflow.mqlidea2.editor.MQL4CodeStyleSettingsProvider"/>
 
         <!-- Code Completion -->
         <completion.contributor language="MQL4"
                                 implementationClass="ru.investflow.mqlidea2.editor.codecompletion.MQL4CompletionContributor"/>
+
+        <!-- Parameter Info -->
+        <codeInsight.parameterInfo language="MQL4"
+                                   implementationClass="ru.investflow.mqlidea2.editor.MQL4ParameterInfoHandler"/>
+
+        <!-- Live Templates -->
+        <defaultLiveTemplates file="/liveTemplates/MQL5.xml"/>
+        <liveTemplateContext implementation="ru.investflow.mqlidea2.editor.MQL4LiveTemplateContext"/>
 
         <!-- Error Annotations from MetaEditor -->
         <externalAnnotator language="MQL4"
@@ -82,6 +127,12 @@
         <localInspection language="MQL4" groupName="MQL5 inspections" enabledByDefault="true" level="WARNING"
                          displayName="Preprocessor #property element"
                          implementationClass="ru.investflow.mqlidea2.inspection.PreprocessorPropertyInspection"/>
+        <localInspection language="MQL4" groupName="MQL5 inspections" enabledByDefault="true" level="WEAK WARNING"
+                         displayName="Missing entry point function"
+                         implementationClass="ru.investflow.mqlidea2.inspection.MQL5EntryPointInspection"/>
+        <localInspection language="MQL4" groupName="MQL5 inspections" enabledByDefault="true" level="WARNING"
+                         displayName="Duplicate #include directive"
+                         implementationClass="ru.investflow.mqlidea2.inspection.MQL5DuplicateIncludeInspection"/>
 
         <!-- Structure View -->
         <lang.psiStructureViewFactory language="MQL4"
@@ -95,6 +146,13 @@
         <gotoClassContributor implementation="ru.investflow.mqlidea2.index.MQL4GotoClassContributor"/>
         <gotoSymbolContributor implementation="ru.investflow.mqlidea2.index.MQL4GotoSymbolContributor"/>
         <gotoDeclarationHandler implementation="ru.investflow.mqlidea2.index.MQL4GotoDeclarationHandler"/>
+
+        <!-- Find Usages -->
+        <lang.findUsagesProvider language="MQL4"
+                                 implementationClass="ru.investflow.mqlidea2.index.MQL4FindUsagesProvider"/>
+
+        <!-- Rename -->
+        <renameHandler implementation="ru.investflow.mqlidea2.refactor.MQL4RenameProcessor"/>
 
         <!-- Tool Window -->
         <toolWindow id="MQL5 Build" anchor="bottom"
@@ -125,7 +183,7 @@
                 class="ru.investflow.mqlidea2.compiler.Mql5BuildAction"
                 text="Compile MQL5" description="Compile current MQL5 file with MetaEditor">
             <add-to-group group-id="BuildMenu" anchor="last"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift F9"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="F7"/>
         </action>
 
         <!-- Run on Chart -->
@@ -133,7 +191,7 @@
                 class="ru.investflow.mqlidea2.compiler.Mql5RunOnChartAction"
                 text="Run on Chart" description="Compile and run in MetaTrader 5 terminal">
             <add-to-group group-id="BuildMenu" anchor="last"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift F10"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="F5"/>
         </action>
 
         <!-- clangd Setup -->
@@ -141,6 +199,14 @@
                 class="ru.investflow.mqlidea2.clangd.ClangdSetupAction"
                 text="Setup clangd for MQL5" description="Generate .clangd configuration for MQL5 IntelliSense">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+
+        <!-- Open in MetaEditor -->
+        <action id="MQL5.OpenInMetaEditor"
+                class="ru.investflow.mqlidea2.action.OpenInMetaEditorAction"
+                text="Open in MetaEditor" description="Open current file in MetaEditor 5">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>

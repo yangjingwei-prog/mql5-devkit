@@ -1,0 +1,81 @@
+<templateSet group="MQL5">
+  <!-- Event Handlers -->
+  <template name="ontick" value="void OnTick()&#10;  {&#10;   $END$&#10;  }" description="OnTick event handler" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="oncalc" value="int OnCalculate(const int rates_total,&#10;                     const int prev_calculated,&#10;                     const datetime &amp;time[],&#10;                     const double &amp;open[],&#10;                     const double &amp;high[],&#10;                     const double &amp;low[],&#10;                     const double &amp;close[],&#10;                     const long &amp;tick_volume[],&#10;                     const long &amp;volume[],&#10;                     const int &amp;spread[])&#10;  {&#10;   $END$&#10;   return rates_total;&#10;  }" description="OnCalculate indicator handler" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="onstart" value="void OnStart()&#10;  {&#10;   $END$&#10;  }" description="OnStart script handler" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="oninit" value="int OnInit()&#10;  {&#10;   $END$&#10;   return INIT_SUCCEEDED;&#10;  }" description="OnInit handler" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="ondeinit" value="void OnDeinit(const int reason)&#10;  {&#10;   $END$&#10;  }" description="OnDeinit handler" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="onchart" value="void OnChartEvent(const int id,&#10;                      const long &amp;lparam,&#10;                      const double &amp;dparam,&#10;                      const string &amp;sparam)&#10;  {&#10;   $END$&#10;  }" description="OnChartEvent handler" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="ontimer" value="void OnTimer()&#10;  {&#10;   $END$&#10;  }" description="OnTimer handler" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="onbook" value="void OnBookEvent(string symbol)&#10;  {&#10;   $END$&#10;  }" description="OnBookEvent handler" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <!-- Control Structures -->
+  <template name="fori" value="for(int i = $START$; i &lt; $LIMIT$; i++)&#10;  {&#10;   $END$&#10;  }" description="For loop with int index" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="forr" value="for(int i = $LIMIT$ - 1; i &gt;= $START$; i--)&#10;  {&#10;   $END$&#10;  }" description="Reverse for loop" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="ife" value="if($CONDITION$)&#10;  {&#10;   $END$&#10;  }" description="If-else block" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="sw" value="switch($EXPR$)&#10;  {&#10;   case $VALUE$:&#10;      $END$&#10;      break;&#10;   default:&#10;      break;&#10;  }" description="Switch statement" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <!-- Common Patterns -->
+  <template name="icustom" value="int handle = iCustom($SYMBOL$, $TIMEFRAME$, &quot;$INDICATOR$&quot;$END$);&#10;if(handle == INVALID_HANDLE)&#10;  {&#10;   Print(&quot;Failed to create indicator: $INDICATOR$&quot;);&#10;   return;&#10;  }" description="iCustom indicator call with error check" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="ordersend" value="ulong ticket = OrderSend($SYMBOL$, $TYPE$, $LOT$, $PRICE$, $SLIPPAGE$, $SL$, $TP$);&#10;if(ticket == 0)&#10;  {&#10;   Print(&quot;OrderSend failed: &quot;, GetLastError());&#10;   $END$&#10;  }" description="OrderSend with error check" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="printf" value="Print(&quot;$MSG$&quot;);$END$" description="Print debug message" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="input" value="input $TYPE$ $NAME$ = $VALUE$; $END$" description="Input parameter declaration" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="prop" value="#property $NAME$ $VALUE$&#10;$END$" description="#property directive" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <!-- Indicator buffers -->
+  <template name="buf" value="double $NAME$Buffer[];&#10;SetIndexBuffer($INDEX$, $NAME$Buffer, INDICATOR_DATA);$END$" description="Indicator buffer declaration and binding" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+
+  <template name="plot" value="#property indicator_buffers $COUNT$&#10;#property indicator_plots $COUNT$&#10;$END$" description="Indicator buffers/plots properties" toReformat="true" toShortenFQNames="true">
+    <context><option name="MQL4" value="true"/></context>
+  </template>
+</templateSet>
