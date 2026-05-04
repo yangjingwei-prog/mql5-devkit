@@ -7,8 +7,12 @@ import com.intellij.ui.LayeredIcon;
 import javax.swing.Icon;
 
 public interface MQL4Icons {
-    // MQL4 files
-    Icon File = IconLoader.getIcon("/icons/mql4.png");
+    // MQL4/MQL5 files (icons extracted from MetaEditor)
+    Icon File = IconLoader.getIcon("/icons/mql5.png");
+    Icon MQLHeader = IconLoader.getIcon("/icons/mqlh.png");
+
+    // MetaEditor application icon
+    Icon MetaEditor = IconLoader.getIcon("/icons/metaeditor.png");
 
     // Classes and structs
     Icon Class = AllIcons.Nodes.Class;

@@ -269,15 +269,27 @@ D:\Code\master\mql5-devkit/
 - [x] `Mql5CompilationResultCache.java` — 项目级错误缓存
 - [x] `Mql5CompileOnSaveHandler.java` — 保存时自动编译
 - [x] `Mql5RunOnChartAction.java` — 编译+部署+启动终端（Ctrl+Shift+F10）
-- [ ] `Mql5SmartTargetResolver.java` — 智能编译目标（.mqh → .mq5）
+- [x] `Mql5SmartCompileTarget.java` — 智能编译目标（.mqh → .mq5）
 
-### Phase 4：项目模板与文件向导（📋 待实现）
+### Phase 4：项目模板与文件向导（✅ 已完成）
 
-- [ ] `Mql5ProjectBuilder.java`
-- [ ] `Mql5ModuleBuilder.java`
-- [ ] 文件模板：EA / Indicator / Script / Service / Include
-- [ ] 模板变量替换
-- [ ] 右键菜单增强
+- [x] `Mql5ModuleBuilder.java` — 新建项目向导（可选初始文件类型和名称）
+- [x] 文件模板：EA / Indicator / Script / Service / Include
+- [x] 模板变量替换（${NAME}, ${YEAR}, ${USER}）
+- [x] 右键菜单 New → MQL5 子菜单
+
+### Phase 6：编辑器增强功能（✅ 已完成）
+
+- [x] `MQL4LiveTemplateContext.java` — Live Template 上下文
+- [x] `liveTemplates/MQL5.xml` — 18 个 Live Template（ontick, oncalc, onstart 等）
+- [x] `OpenInMetaEditorAction.java` — 右键/项目菜单打开 MetaEditor
+- [x] `MQL4TypedHandler.java` — 自动配对引号（单引号/双引号）
+- [x] `MQL4ColorSettingsPage.java` — 颜色设置页（Settings > Editor > Color Scheme > MQL5）
+- [x] `MQL4ParameterInfoHandler.java` — 参数提示（Ctrl+P）
+- [x] `MQL4FindUsagesProvider.java` — 查找引用（Alt+F7）
+- [x] `MQL4RenameProcessor.java` — 重命名重构（Shift+F6）
+- [x] Build Log 工具栏（清除/复制按钮）
+- [x] Settings 页面 Test 按钮验证 MetaEditor 路径
 
 ### Phase 5：clangd 集成（✅ 基础完成）
 

@@ -47,7 +47,15 @@ public class Mql5BuildAction extends AnAction {
 
         // 如果是 .mqh 头文件，尝试找到引用它的 .mq5
         if ("mqh".equalsIgnoreCase(file.getExtension())) {
-            notify(project, "MQL5 DevKit", "Smart compile target for .mqh files is not yet implemented.",
+            VirtualFile target = Mql5SmartCompileTarget.findCompileTarget(file, project);
+            if (target != null) {
+                String targetPath = target.getCanonicalPath();
+                if (targetPath != null) {
+                    compileFile(project, metaEditorPath, targetPath, target.getName() + " (via " + file.getName() + ")", target);
+                    return;
+                }
+            }
+            notify(project, "MQL5 DevKit", "No .mq5/.mq4 file found that includes " + file.getName(),
                 NotificationType.WARNING);
             return;
         }
